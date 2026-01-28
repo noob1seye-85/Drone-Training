@@ -61,7 +61,7 @@ Inspired by real-world SAR drone applications (thermal person detection, supply 
 
 ## Getting Started (For Anyone Reviewing)
 
-1. Clone the repo: `git clone https://github.com/yourusername/your-repo-name.git`
+1. Clone the repo: `git clone https://github.com/noob1seye-85/Drone-Training.git`
 2. Create & activate virtual environment:
    ```bash
    python -m venv venv

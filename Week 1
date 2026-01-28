@@ -1,0 +1,57 @@
+#drone_data_intro.py
+#This data is ficticious and simply for educational purposes. 
+#This is the first script: load, inspect, and visualize fake drone sensor data
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+#Step one sample data. Reality is this comes from a CSV file post-flight. 
+data = {
+    'timestamp': ['2026-01-27 10:00:00', '2026-01-27 10:00:05', '2026-01-27 10:00:10', 
+                  '2026-01-27 10:00:15', '2026-01-27 10:00:20'],
+    'latitude': [52.5200, 52.5201, 52.5203, 52.5206, 52.5210],
+    'longitude': [13.4050, 13.4052, 13.4055, 13.4060, 13.4068],
+    'altitude_m': [120.5, 121.2, 122.8, 125.1, 128.4],
+    'speed_mps': [8.2, 8.5, 9.1, 9.8, 10.5],
+    'detected_objects': [0, 1, 1, 2, 2],          # e.g. people/vehicles spotted
+    'thermal_anomaly_score': [0.12, 0.45, 0.68, 0.92, 0.88],  # fake heat signature confidence
+    'battery_percent': [98, 96, 94, 92, 89]
+}
+
+df = pd.DataFrame(data)
+df['timestamp'] = pd.to_datetime(df['timestamp'])   # convert to real datetime
+
+# Step 2: Basic inspection (what every data scientist does first)
+print("First 3 rows of our drone data:")
+print(df.head(3))
+
+print("\nBasic statistics:")
+print(df.describe())
+
+print("\nData types:")
+print(df.dtypes)
+
+# Step 3: Simple visualization - altitude and detected objects over time
+plt.figure(figsize=(10, 6))
+
+# Left y-axis: altitude
+plt.plot(df['timestamp'], df['altitude_m'], color='blue', marker='o', label='Altitude (m)')
+plt.ylabel('Altitude (meters)', color='blue')
+plt.tick_params(axis='y', labelcolor='blue')
+
+# Right y-axis: number of detected objects
+ax2 = plt.gca().twinx()
+ax2.plot(df['timestamp'], df['detected_objects'], color='red', marker='x', label='Detected Objects')
+ax2.set_ylabel('Number of Detected Objects', color='red')
+ax2.tick_params(axis='y', labelcolor='red')
+
+plt.title('Drone Flight: Altitude & Detected Objects Over Time')
+plt.xlabel('Time')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+
+# Show the plot (or save with plt.savefig('drone_plot.png'))
+plt.show()
+
+print("\nScript finished! Look for the plot window.")

@@ -55,3 +55,30 @@ plt.tight_layout()
 plt.show()
 
 print("\nScript finished! Look for the plot window.")
+
+# --- Derived features useful for drone analysis ---
+
+# 1. Time delta in seconds between readings (for rates)
+df['time_delta_s'] = df['timestamp'].diff().dt.total_seconds().fillna(0)
+
+# 2. Vertical speed (climb/descent rate) in m/s
+df['vertical_speed_mps'] = df['altitude_m'].diff() / df['time_delta_s'].replace(0, np.nan)
+df['vertical_speed_mps'] = df['vertical_speed_mps'].fillna(0)  # first row has no previous
+
+# 3. Battery drain rate (% per minute) – more interpretable than per 5s
+df['battery_drain_per_min'] = (df['battery_percent'].diff() / df['time_delta_s']) * 60
+df['battery_drain_per_min'] = df['battery_drain_per_min'].fillna(0).round(2)
+
+# 4. Rough horizontal distance traveled since start (very approx – lat/lon to meters)
+# 1 degree latitude ≈ 111 km, longitude varies but approx same at Berlin latitude
+lat_diff = (df['latitude'] - df['latitude'].iloc[0]) * 111_000
+lon_diff = (df['longitude'] - df['longitude'].iloc[0]) * 111_000 * np.cos(np.radians(52.52))
+df['horizontal_distance_m'] = np.sqrt(lat_diff**2 + lon_diff**2).round(1)
+
+# 5. Cumulative distance (horizontal only for simplicity)
+df['cumulative_distance_m'] = df['horizontal_distance_m'].cumsum().round(1)
+
+print("DataFrame with new derived features:")
+print(df[['timestamp', 'altitude_m', 'vertical_speed_mps', 
+         'battery_percent', 'battery_drain_per_min', 
+         'horizontal_distance_m', 'cumulative_distance_m']])

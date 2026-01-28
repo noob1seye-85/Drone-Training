@@ -1,5 +1,5 @@
 # Drone-Training
-
+![Python](https://img.shields.io/badge/python-3.13-blue)
 # Multimodal AI for Drone-Enabled Search & Rescue
 
 A personal learning & portfolio project to build multimodal AI systems for aerial (primarily), land, and water-based drones. Focus areas:
